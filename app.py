@@ -1,16 +1,27 @@
+import feedparser
 from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 Bootstrap(app)
 
+BBC_feed = "http://feeds.bbci.co.uk/news/rss.xml"
+
 @app.route('/<name>')
 def user(name):
     user_agent = request.headers.get('user_agent')
     return render_template('user.html', name=name, user_agent=user_agent)
 
+@app.route('/headline')
+def get_news_feed():
+    first_article =[]
+    feed = feedparser.parse(BBC_feed)
+    first_article = feed['entries'][0]
+    return render_template('news_feed.html', first_article=first_article)
+
 @app.route('/')
 def index():
+
     return render_template('index.html')
 
 @app.errorhandler(404)
