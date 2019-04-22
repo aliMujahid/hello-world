@@ -5,11 +5,11 @@
         <div class="page-header">
             <h1>BBC Headlines</h1>
         </div>
-
-            <b>{{first_article.get("title")}}</b> <br />
-            <i> {{first_article.get("published")}}</i>
-            <p> {{first_article.get("summery")}}</p>
-
+            {% for article in articles %}
+            <b><a href="{{article.get("link")}}">{{article.get("title")}}</a></b> <br />
+            <i> {{article.get("published")}}</i>
+            <p> {{article.get("summary")}}</p><hr />
+            {% endfor %}
     </div>
 
 {% endblock %}

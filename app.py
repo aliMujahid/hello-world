@@ -16,8 +16,8 @@ def user(name):
 def get_news_feed():
     first_article =[]
     feed = feedparser.parse(BBC_feed)
-    first_article = feed['entries'][0]
-    return render_template('news_feed.html', first_article=first_article)
+    articles = feed['entries']
+    return render_template('news_feed.html', articles=articles)
 
 @app.route('/')
 def index():
