@@ -5,19 +5,27 @@ from flask_bootstrap import Bootstrap
 app = Flask(__name__)
 Bootstrap(app)
 
-BBC_feed = "http://feeds.bbci.co.uk/news/rss.xml"
+RSS_FEEDS = {'bbc': 'http://feeds.bbci.co.uk/news/rss.xml', 'cnn': 'http://rss.cnn.com/rss/edition.rss',
+            'fox': 'http://feeds.foxnews.com/foxnews/latest', 'iol': 'http://www.iol.co.za/cmlink/1.640'}
+
 
 @app.route('/<name>')
 def user(name):
     user_agent = request.headers.get('user_agent')
     return render_template('user.html', name=name, user_agent=user_agent)
 
+
 @app.route('/headline')
 def get_news_feed():
-    first_article =[]
-    feed = feedparser.parse(BBC_feed)
+    quary = request.args.get("publication")
+    if not quary or quary.lower() not in RSS_FEEDS:
+        publication = 'bbc'
+    else:
+        publication = quary.lower()
+    head = publication.upper()
+    feed = feedparser.parse(RSS_FEEDS[publication])
     articles = feed['entries']
-    return render_template('news_feed.html', articles=articles)
+    return render_template('news_feed.html',head=head, articles=articles)
 
 @app.route('/')
 def index():
